@@ -6,6 +6,7 @@ import {
   useReadContract,
   useWriteContract,
 } from "wagmi";
+
 import { gmAbi } from "@/lib/abi";
 import { useState } from "react";
 
@@ -20,9 +21,8 @@ export default function CheckinPage() {
   };
 
   // -------------------------
-  // CHECK CAN GM TODAY?
+  // CHECK: can GM today?
   // -------------------------
-
   const {
     data: canGM,
     refetch: refetchCanGM,
@@ -31,13 +31,23 @@ export default function CheckinPage() {
     ...contract,
     functionName: "canGM",
     args: address ? [address] : undefined,
-
   });
 
   // -------------------------
-  // WRITE GM
+  // GET streak
   // -------------------------
+  const {
+    data: streak,
+    refetch: refetchStreak,
+  } = useReadContract({
+    ...contract,
+    functionName: "getStreak",
+    args: address ? [address] : undefined,
+  });
 
+  // -------------------------
+  // SEND GM
+  // -------------------------
   const {
     writeContract,
     data: gmTxHash,
@@ -53,12 +63,12 @@ export default function CheckinPage() {
         functionName: "gm",
       });
 
-      // Lưu tx vào state
       if (gmTxHash) setTxHash(gmTxHash);
 
-      // Refresh trạng thái canGM
+      // refresh UI
       setTimeout(() => {
         refetchCanGM();
+        refetchStreak();
       }, 3000);
     } catch (err) {
       console.error("GM Error:", err);
@@ -68,20 +78,21 @@ export default function CheckinPage() {
   // -------------------------
   // UI
   // -------------------------
-
   return (
     <main style={{ padding: 40 }}>
-      <h1>GGM Daily - Active Base & Farcaster ☀️</h1>
+      <h1>GM Daily - Active Base & Farcaster☀️</h1>
 
       <ConnectButton />
 
-      {!isConnected && <p>Please connect your wallet to continue.</p>}
+      {!isConnected && <p>Kết nối ví để tiếp tục.</p>}
 
       {isConnected && (
         <>
+          
+          <h3>🔥 Streak hiện tại: {Number(streak || 0)} ngày</h3>
 
           {checkingGM ? (
-            <p>Checking GM status…</p>
+            <p>Đang kiểm tra xem bạn đã GM hôm nay chưa...</p>
           ) : (
             <>
               {canGM ? (
@@ -90,17 +101,18 @@ export default function CheckinPage() {
                   disabled={isSendingGM}
                   style={{
                     marginTop: 20,
-                    padding: "10px 20px",
+                    padding: "12px 24px",
                     background: "#2563eb",
                     color: "white",
                     borderRadius: 8,
                     border: "none",
+                    fontSize: 16,
                   }}
                 >
-                  {isSendingGM ? "Sending GM..." : "GM Base 🌞"}
+                  {isSendingGM ? "Đang gửi GM..." : "GM Hôm Nay 🌞"}
                 </button>
               ) : (
-                <p>You’ve already GM’d today !!!</p>
+                <p>Bạn đã GM hôm nay rồi 🌙</p>
               )}
             </>
           )}
