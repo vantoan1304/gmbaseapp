@@ -1,9 +1,11 @@
+// app/layout.tsx
 import "./globals.css";
+import type { Metadata } from "next";
 import { Providers } from "./providers";
 
-export const metadata = {
-  title: "GM Checkin",
-  description: "Daily GM Checkin on Base - Active Farcater",
+export const metadata: Metadata = {
+  title: "GM Base App",
+  description: "GM checkin mini app on Farcaster & Base",
 };
 
 export default function RootLayout({

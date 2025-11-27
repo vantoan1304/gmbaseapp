@@ -1,133 +1,112 @@
+// app/checkin/page.tsx
 "use client";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import {
-  useAccount,
-  useReadContract,
-  useWriteContract,
-} from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { GM_ABI } from "@/lib/gmAbi";
+import { useEffect, useState } from "react";
 
-import { gmAbi } from "@/lib/abi";
-import { useState } from "react";
+const CONTRACT_ADDRESS =
+  process.env.NEXT_PUBLIC_GM_CONTRACT_ADDRESS as `0x${string}`;
 
 export default function CheckinPage() {
   const { address, isConnected } = useAccount();
-  const [txHash, setTxHash] = useState("");
 
-  // Contract config
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const contract = {
-    address: process.env.NEXT_PUBLIC_GM_CONTRACT_ADDRESS as `0x${string}`,
-    abi: gmAbi,
-  };
+    address: CONTRACT_ADDRESS,
+    abi: GM_ABI,
+  } as const;
 
-  // -------------------------
-  // CHECK: can GM today?
-  // -------------------------
-  const {
-    data: canGM,
-    refetch: refetchCanGM,
-    isFetching: checkingGM,
-  } = useReadContract({
-    ...contract,
-    functionName: "canGM",
-    args: address ? [address] : undefined,
-  });
-
-  // -------------------------
-  // GET streak
-  // -------------------------
   const {
     data: streak,
     refetch: refetchStreak,
+    isFetching: loadingStreak,
   } = useReadContract({
     ...contract,
-    functionName: "getStreak",
+    functionName: "streak",
     args: address ? [address] : undefined,
+    query: {
+      enabled: mounted && !!address,
+    },
   });
 
-  // -------------------------
-  // SEND GM
-  // -------------------------
-  const {
-    writeContract,
-    data: gmTxHash,
-    isPending: isSendingGM,
-  } = useWriteContract();
+  const { writeContractAsync, isPending } = useWriteContract();
+  const [txHash, setTxHash] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-  async function handleGM() {
+  const handleGM = async () => {
     if (!address) return;
+    setError(null);
 
     try {
-      writeContract({
+      const hash = await writeContractAsync({
         ...contract,
         functionName: "gm",
       });
 
-      if (gmTxHash) setTxHash(gmTxHash);
+      setTxHash(hash as string);
 
-      // refresh UI
       setTimeout(() => {
-        refetchCanGM();
         refetchStreak();
-      }, 3000);
-    } catch (err) {
-      console.error("GM Error:", err);
+      }, 10_000);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.shortMessage || err?.message || "Transaction failed");
     }
-  }
+  };
 
-  // -------------------------
-  // UI
-  // -------------------------
   return (
     <main style={{ padding: 40 }}>
-      <h1>GM Daily - Active Base & Farcaster☀️</h1>
+      <h1>GM Daily – Base & Farcaster 🌞</h1>
 
       <ConnectButton />
 
-      {!isConnected && <p>Kết nối ví để tiếp tục.</p>}
-
-      {isConnected && (
+      {!mounted ? (
+        <p>Đang kiểm tra trạng thái ví...</p>
+      ) : !isConnected ? (
+        <p>Hãy kết nối ví để bắt đầu.</p>
+      ) : (
         <>
-          
-          <h3>🔥 Streak hiện tại: {Number(streak || 0)} ngày</h3>
+          <p>Địa chỉ: {address}</p>
 
-          {checkingGM ? (
-            <p>Đang kiểm tra xem bạn đã GM hôm nay chưa...</p>
-          ) : (
-            <>
-              {canGM ? (
-                <button
-                  onClick={handleGM}
-                  disabled={isSendingGM}
-                  style={{
-                    marginTop: 20,
-                    padding: "12px 24px",
-                    background: "#2563eb",
-                    color: "white",
-                    borderRadius: 8,
-                    border: "none",
-                    fontSize: 16,
-                  }}
-                >
-                  {isSendingGM ? "Đang gửi GM..." : "GM Hôm Nay 🌞"}
-                </button>
-              ) : (
-                <p>Bạn đã GM hôm nay rồi 🌙</p>
-              )}
-            </>
-          )}
+          <p>
+            Streak hiện tại:{" "}
+            {loadingStreak ? "Đang tải..." : Number(streak || 0)} ngày
+          </p>
+
+          <button
+            onClick={handleGM}
+            disabled={isPending}
+            style={{
+              marginTop: 16,
+              padding: "8px 16px",
+              fontSize: 16,
+              cursor: "pointer",
+            }}
+          >
+            {isPending ? "Đang gửi GM..." : "GM hôm nay 🌞"}
+          </button>
 
           {txHash && (
-            <p style={{ marginTop: 20 }}>
+            <p style={{ marginTop: 8 }}>
               Tx:{" "}
               <a
                 href={`https://basescan.org/tx/${txHash}`}
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noreferrer"
               >
-                {txHash.slice(0, 10)}...
+                Xem trên Basescan
               </a>
             </p>
+          )}
+
+          {error && (
+            <p style={{ color: "red", marginTop: 8 }}>Lỗi: {error}</p>
           )}
         </>
       )}
