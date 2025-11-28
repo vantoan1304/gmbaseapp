@@ -1,7 +1,8 @@
 // src/app/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { sdk } from "@farcaster/miniapp-sdk";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/wagmi";
@@ -9,6 +10,11 @@ import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/wagmi";
 export default function Page() {
   const { address, isConnected } = useAccount();
   const [txHash, setTxHash] = useState<string | undefined>();
+
+  // Gọi khi mini app đã sẵn sàng (tắt splash trong Farcaster)
+  useEffect(() => {
+    sdk.actions.ready();
+  }, []);
 
   // đọc streak
   const { data: streak, refetch, isLoading: loadingStreak } = useReadContract({
