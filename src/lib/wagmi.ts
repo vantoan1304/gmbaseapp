@@ -1,12 +1,37 @@
-// lib/gmAbi.ts
-export const GM_ABI = [
-  {
-    inputs: [],
-    name: "gm",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
+// src/lib/wagmi.ts
+import { http, createConfig } from "wagmi";
+import { base } from "wagmi/chains";
+import { injected, safe, walletConnect } from "wagmi/connectors";
+import { farcasterMiniApp as miniAppConnector } from "@farcaster/miniapp-wagmi-connector";
+
+// WalletConnect Cloud project id
+const projectId = process.env.NEXT_PUBLIC_WC_PROJECT_ID || "";
+
+// ---- wagmi config (MiniApp + walletConnect + injected + safe) ----
+const getConfig = () =>
+  createConfig({
+    chains: [base],
+    connectors: [
+      injected(),
+      walletConnect({ projectId }),
+      safe(),
+      miniAppConnector(),
+    ],
+    ssr: true,
+    transports: {
+      [base.id]: http(process.env.NEXT_PUBLIC_BASE_RPC_URL),
+    },
+  });
+
+export const config = getConfig();
+
+// ---- GM contract info ----
+export const CONTRACT_ADDRESS =
+  process.env
+    .NEXT_PUBLIC_GM_CONTRACT_ADDRESS as `0x${string}`;
+
+// ABI GM của bạn (đúng như đã compile)
+export const CONTRACT_ABI = [
   {
     anonymous: false,
     inputs: [
@@ -31,6 +56,13 @@ export const GM_ABI = [
     ],
     name: "GMed",
     type: "event",
+  },
+  {
+    inputs: [],
+    name: "gm",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [

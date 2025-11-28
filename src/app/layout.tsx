@@ -1,11 +1,12 @@
-// app/layout.tsx
-import "./globals.css";
+// src/app/layout.tsx
 import type { Metadata } from "next";
+import "./globals.css";
+import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
 
 export const metadata: Metadata = {
-  title: "GM Base App",
-  description: "GM checkin mini app on Farcaster & Base",
+  title: "GM Daily – Base & Farcaster",
+  description: "Mini app GM streak trên Base & Farcaster",
 };
 
 export default function RootLayout({
