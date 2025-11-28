@@ -35,7 +35,7 @@ export async function GET() {
             "primaryCategory": "social",
             "tags": ["example", "miniapp", "baseapp"],
             "heroImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
-            "tagline": "Play instantly",
+            "tagline": "Play instantly", 
             "ogTitle": "GMBase Miniapp",
             "ogDescription": "Active Base",
             "ogImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
