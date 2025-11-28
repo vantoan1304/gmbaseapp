@@ -36,8 +36,8 @@ export async function GET() {
             "tags": ["example", "miniapp", "baseapp"],
             "heroImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "tagline": "Play instantly",
-            "ogTitle": "Checkin, active Base & Farcaster Mini App",
-            "ogDescription": "Challenge friends in real time.",
+            "ogTitle": "Checkin Mini App",
+            "ogDescription": "Active Base & Farcaster.",
             "ogImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "noindex": true
         }
