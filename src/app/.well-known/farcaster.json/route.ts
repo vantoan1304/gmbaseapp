@@ -26,7 +26,7 @@ export async function GET() {
             "splashBackgroundColor": "#000000",
             "webhookUrl": "https://ex.co/api/webhook",
             "subtitle": "Fast, fun, social",
-            "description": "CHOOSE ODD OR EVEN • PLACE YOUR BET • LET THE BLOCKCHAIN DECIDE YOUR FATE!",
+            "description": "Active Base & Farcaster!",
             "screenshotUrls": [
                 "https://gmbaseapp-xx84.vercel.app/ss1.png",
                 "https://gmbaseapp-xx84.vercel.app/ss2.png",
