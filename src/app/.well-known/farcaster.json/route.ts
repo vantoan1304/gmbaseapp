@@ -19,10 +19,10 @@ export async function GET() {
             "version": "1",
             "name": "GMBase",
             "homeUrl": "https://gmbaseapp-xx84.vercel.app/",
-            "iconUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
-            "imageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+            "iconUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
+            "imageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
             "buttonTitle": "GMBase Miniapp",
-            "splashImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+            "splashImageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
             "splashBackgroundColor": "#000000",
             "webhookUrl": "https://ex.co/api/webhook",
             "subtitle": "Fast, fun, social",
@@ -34,11 +34,11 @@ export async function GET() {
             ],
             "primaryCategory": "social",
             "tags": ["example", "miniapp", "baseapp"],
-            "heroImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+            "heroImageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
             "tagline": "Play instantly", 
             "ogTitle": "GMBase Miniapp",
             "ogDescription": "Active Base",
-            "ogImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+            "ogImageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
             "noindex": true
         }
     }); // see the next step for the manifest_json_object
