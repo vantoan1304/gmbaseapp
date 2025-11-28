@@ -21,7 +21,7 @@ export async function GET() {
             "homeUrl": "https://gmbaseapp-xx84.vercel.app/",
             "iconUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "imageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
-            "buttonTitle": "Checkin, active Base & Farcaster",
+            "buttonTitle": "GMBase Miniapp",
             "splashImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "splashBackgroundColor": "#000000",
             "webhookUrl": "https://ex.co/api/webhook",
@@ -36,7 +36,7 @@ export async function GET() {
             "tags": ["example", "miniapp", "baseapp"],
             "heroImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "tagline": "Play instantly",
-            "ogTitle": "Checkin Mini App",
+            "ogTitle": "GMBase Miniapp",
             "ogDescription": "Active Base & Farcaster.",
             "ogImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
             "noindex": true
