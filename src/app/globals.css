@@ -150,10 +150,22 @@ body {
   100% { transform: translate(0); }
 }
 
+
 .glitch-text {
   animation: glitch 0.3s infinite;
 }
 
 .glitch-text:hover {
   animation: glitch 0.1s infinite;
+}
+
+button[data-testid="rk-connect-button"] {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center; /* căn giữa text */
+}
+
+body, p {
+  color: #000 
 }
