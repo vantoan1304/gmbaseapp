@@ -10,14 +10,14 @@ export const metadata: Metadata = {
   other: {
     "fc:miniapp": `{
       "version": "1",
-      "imageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+      "imageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
       "button": {
         "title": "Open GMBase",
         "action": {
           "type": "launch_frame",
           "name": "GMBase",
           "url": "https://gmbaseapp-xx84.vercel.app/",
-          "splashImageUrl": "https://gmbaseapp-xx84.vercel.app/5050.png",
+          "splashImageUrl": "https://gmbaseapp-xx84.vercel.app/gm.png",
           "splashBackgroundColor": "#000000"
         }
       }

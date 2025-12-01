@@ -44,22 +44,22 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-black text-white flex flex-col items-center p-6 gap-6">
       <h1 className="text-2xl font-bold mt-4">
-        GM Daily – Base & Farcaster ☀️
+        GM Base & Farcaster ☀️
       </h1>
 
       <ConnectButton />
 
       {!isConnected && (
         <p className="mt-4 text-sm text-zinc-400">
-          Hãy kết nối ví để bắt đầu.
+          Connect Wallet.
         </p>
       )}
 
       {isConnected && (
         <div className="mt-6 space-y-3 text-sm">
-          <p>Địa chỉ: {address}</p>
+          
           <p>
-            Streak hiện tại:{" "}
+            Streak:{" "}
             {loadingStreak ? "Đang tải..." : Number(streak || 0) + " ngày"}
           </p>
 
@@ -68,7 +68,7 @@ export default function Page() {
             disabled={isPending}
             className="mt-4 px-4 py-2 rounded-lg bg-yellow-400 text-black font-semibold disabled:opacity-60"
           >
-            {isPending ? "Đang gửi..." : "GM hôm nay ☀️"}
+            {isPending ? "Sending..." : "GM today ☀️"}
           </button>
 
           {txHash && (
@@ -79,7 +79,7 @@ export default function Page() {
                 href={`https://basescan.org/tx/${txHash}`}
                 target="_blank"
               >
-                Xem trên Basescan
+                View Basescan
               </a>
             </p>
           )}
