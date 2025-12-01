@@ -7,6 +7,7 @@ import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from "@/lib/wagmi";
 import styles from "./page.module.css";
+import confetti from "canvas-confetti"; // 🎆 pháo hoa
 
 export default function Page() {
   const { address, isConnected } = useAccount();
@@ -90,20 +91,50 @@ export default function Page() {
 
   const { writeContractAsync, isPending } = useWriteContract();
 
+  // 🎇 bắn pháo hoa khi GM xong
+  const fireConfetti = () => {
+    confetti({
+      particleCount: 160,
+      spread: 70,
+      origin: { y: 0.7 },
+    });
+
+    setTimeout(() => {
+      confetti({
+        particleCount: 100,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+      });
+      confetti({
+        particleCount: 100,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+      });
+    }, 400);
+  };
+
   const handleGM = async () => {
     if (!address) return;
-    const hash = await writeContractAsync({
-      address: CONTRACT_ADDRESS,
-      abi: CONTRACT_ABI,
-      functionName: "gm",
-    });
-    setTxHash(hash);
-    // chờ 1-2s rồi refetch dữ liệu liên quan
-    setTimeout(() => {
-      refetchStreak();
-      refetchTimeLeft();
-      refetchHistory();
-    }, 2000);
+    try {
+      const hash = await writeContractAsync({
+        address: CONTRACT_ADDRESS,
+        abi: CONTRACT_ABI,
+        functionName: "gm",
+      });
+      setTxHash(hash);
+
+      // chờ 1-2s rồi refetch dữ liệu liên quan
+      setTimeout(() => {
+        refetchStreak();
+        refetchTimeLeft();
+        refetchHistory();
+        fireConfetti(); // 🎉 GM thành công
+      }, 2000);
+    } catch (e) {
+      console.error("GM error:", e);
+    }
   };
 
   const formatSeconds = (total: number) => {
@@ -124,23 +155,32 @@ export default function Page() {
           GM Base & Farcaster <span>Free</span>
         </h1>
 
-       
+        {/* Nút connect luôn hiển thị */}
+        <div className="mt-4">
+          <ConnectButton />
+        </div>
+
+        {/* Nếu chưa connect, có thể show thêm hint */}
+        {!isConnected && (
+          <p className="mt-2 text-xs text-zinc-400">
+            Please connect your wallet to start your GM streak.
+          </p>
+        )}
 
         {isConnected && (
           <div className="mt-6 space-y-4 text-sm">
             {/* STREAK */}
             <p className="streak">
               ⚡ Day Streak:{" "}
-              {loadingStreak ? "Loading..." : Number(streak || 0)} 
+              {loadingStreak ? "Loading..." : Number(streak || 0)}
             </p>
 
             {/* COUNTDOWN */}
             <div className="mt-2">
-              
               {loadingTimeLeft ? (
                 <p>Loading...</p>
               ) : countdown === 0 ? (
-                 <ConnectButton />
+                <p className="text-green-400">You can GM now ✅</p>
               ) : (
                 <p className="text-yellow-300">
                   Next GM: {formatSeconds(countdown)}
